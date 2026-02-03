@@ -1,0 +1,94 @@
+# Operational Analytics Drasi Continuous Queries
+# Showcases cross-entity aggregation and workload monitoring
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: delivery-retry-storm
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: delivery_attempts
+  query: |
+    MATCH (a:alerts), (da:delivery_attempts)
+    WHERE da.alert_id = a.alert_id
+      AND da.status = 'failed'
+      AND a.status IN ['Approved', 'Delivered']
+    WITH
+      a,
+      COUNT(da) AS failedAttempts,
+      COLLECT(da.failure_reason) AS failureReasons
+    WHERE failedAttempts >= 3
+    RETURN
+      a.alert_id AS alertId,
+      a.headline AS headline,
+      a.severity AS severity,
+      failedAttempts AS failedAttemptCount,
+      failureReasons[0] AS lastFailureReason,
+      drasi.changeDateTime(a) AS detectedAt
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: approver-workload-monitor
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: approval_records
+  query: |
+    MATCH (ar:approval_records)
+    WHERE ar.decided_at > datetime.realtime() - duration({ hours: 1 })
+    WITH
+      ar.approver_id AS approverId,
+      COUNT(ar) AS decisionsInHour,
+      SUM(CASE WHEN ar.decision = 'approved' THEN 1 ELSE 0 END) AS approvedCount,
+      SUM(CASE WHEN ar.decision = 'rejected' THEN 1 ELSE 0 END) AS rejectedCount
+    WHERE decisionsInHour >= 5
+    RETURN
+      approverId AS approverId,
+      decisionsInHour AS decisionsInHour,
+      approvedCount AS approvedCount,
+      rejectedCount AS rejectedCount,
+      CASE 
+        WHEN decisionsInHour >= 10 THEN 'critical'
+        WHEN decisionsInHour >= 7 THEN 'high'
+        ELSE 'medium'
+      END AS workloadLevel
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: delivery-success-rate
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: delivery_attempts
+  query: |
+    MATCH (da:delivery_attempts)
+    WHERE da.attempted_at > datetime.realtime() - duration({ hours: 1 })
+    WITH
+      COUNT(da) AS totalAttempts,
+      SUM(CASE WHEN da.status = 'success' THEN 1 ELSE 0 END) AS successCount,
+      SUM(CASE WHEN da.status = 'failed' THEN 1 ELSE 0 END) AS failedCount
+    WHERE totalAttempts >= 5
+    WITH
+      totalAttempts,
+      successCount,
+      failedCount,
+      toFloat(successCount) / toFloat(totalAttempts) * 100 AS successRate
+    WHERE successRate < 80
+    RETURN
+      totalAttempts AS totalAttempts,
+      successCount AS successCount,
+      failedCount AS failedCount,
+      successRate AS successRatePercent

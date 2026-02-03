@@ -1,0 +1,294 @@
+---
+# Emergency Alerts Drasi HTTP reaction configuration
+apiVersion: v1
+kind: Reaction
+name: emergency-alerts-http
+spec:
+  kind: Http
+  properties:
+    baseUrl: http://emergency-alerts-api.emergency-alerts.svc.cluster.local/api/v1/drasi/reactions
+    timeout: 30000
+  queries:
+    delivery-trigger: >
+      added:
+        url: /delivery-trigger
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}"
+          }
+    delivery-sla-breach: >
+      added:
+        url: /delivery-sla-breach
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "headline": "{{after.headline}}",
+            "severity": "{{after.severity}}",
+            "elapsedSeconds": 60
+          }
+    approval-timeout: >
+      added:
+        url: /approval-timeout
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "elapsedMinutes": 5
+          }
+    geographic-correlation: >
+      added:
+        url: /regional-hotspot
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "regionCode": "{{after.regionCode}}",
+            "alertCount": {{after.alertCount}}
+          }
+    regional-hotspot: >
+      added:
+        url: /regional-hotspot
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "regionCode": "{{after.hotspotRegion}}",
+            "alertCount": {{after.alertsInRegion}}
+          }
+    severity-escalation: >
+      added:
+        url: /severity-escalation
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertIds": [
+              "{{after.alertId1}}",
+              "{{after.alertId2}}"
+            ],
+            "fromSeverity": "{{after.previousSeverity}}",
+            "toSeverity": "{{after.escalatedSeverity}}"
+          }
+    duplicate-suppression: >
+      added:
+        url: /duplicate-suppression
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "duplicateAlertId": "{{after.duplicateAlertId}}",
+            "headline": "{{after.headline}}",
+            "regionCode": "{{after.regionCode}}"
+          }
+    area-expansion-suggestion: >
+      added:
+        url: /area-expansion-suggestion
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertIds": [
+              "{{after.alertId1}}",
+              "{{after.alertId2}}"
+            ],
+            "regionCodes": [
+              "{{after.regionCode1}}",
+              "{{after.regionCode2}}"
+            ],
+            "headline": "{{after.headline}}"
+          }
+    all-clear-suggestion: >
+      added:
+        url: /all-clear-suggestion
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "headline": "{{after.headline}}",
+            "deliveredAt": "{{after.deliveredAt}}",
+            "suggestedAt": "{{after.suggestedAt}}"
+          }
+    expiry-warning: >
+      added:
+        url: /expiry-warning
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "expiresAt": "{{after.expiresAt}}"
+          }
+    rate-spike-detection: >
+      added:
+        url: /rate-spike-detection
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertsInWindow": {{after.alertsInWindow}},
+            "creationRatePerHour": {{after.creationRatePerHour}}
+          }
+    sla-countdown: >
+      added:
+        url: /sla-countdown
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "headline": "{{after.headline}}",
+            "severity": "{{after.severity}}",
+            "secondsElapsed": {{after.secondsElapsed}},
+            "secondsRemaining": {{after.secondsRemaining}},
+            "breachAt": "{{after.breachAt}}"
+          }
+      updated:
+        url: /sla-countdown
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "headline": "{{after.headline}}",
+            "severity": "{{after.severity}}",
+            "secondsElapsed": {{after.secondsElapsed}},
+            "secondsRemaining": {{after.secondsRemaining}},
+            "breachAt": "{{after.breachAt}}"
+          }
+    delivery-retry-storm: >
+      added:
+        url: /delivery-retry-storm
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "headline": "{{after.headline}}",
+            "severity": "{{after.severity}}",
+            "failedAttemptCount": {{after.failedAttemptCount}},
+            "lastFailureReason": "{{after.lastFailureReason}}"
+          }
+      updated:
+        url: /delivery-retry-storm
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "alertId": "{{after.alertId}}",
+            "headline": "{{after.headline}}",
+            "severity": "{{after.severity}}",
+            "failedAttemptCount": {{after.failedAttemptCount}},
+            "lastFailureReason": "{{after.lastFailureReason}}"
+          }
+    approver-workload-monitor: >
+      added:
+        url: /approver-workload
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "approverId": "{{after.approverId}}",
+            "decisionsInHour": {{after.decisionsInHour}},
+            "approvedCount": {{after.approvedCount}},
+            "rejectedCount": {{after.rejectedCount}},
+            "workloadLevel": "{{after.workloadLevel}}"
+          }
+      updated:
+        url: /approver-workload
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "approverId": "{{after.approverId}}",
+            "decisionsInHour": {{after.decisionsInHour}},
+            "approvedCount": {{after.approvedCount}},
+            "rejectedCount": {{after.rejectedCount}},
+            "workloadLevel": "{{after.workloadLevel}}"
+          }
+    delivery-success-rate: >
+      added:
+        url: /delivery-success-rate
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "totalAttempts": {{after.totalAttempts}},
+            "successCount": {{after.successCount}},
+            "failedCount": {{after.failedCount}},
+            "successRatePercent": {{after.successRatePercent}}
+          }
+      updated:
+        url: /delivery-success-rate
+        method: POST
+        headers:
+          Content-Type: application/json
+          X-Reaction-Source: drasi
+          X-Reaction-Token: cluster-local
+        body: |
+          {
+            "totalAttempts": {{after.totalAttempts}},
+            "successCount": {{after.successCount}},
+            "failedCount": {{after.failedCount}},
+            "successRatePercent": {{after.successRatePercent}}
+          }

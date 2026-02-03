@@ -1,0 +1,83 @@
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+packages/
+*.nupkg
+*.snupkg
+proj.assets.json
+project.fragment.lock.json
+artifacts/
+TestResults/
+
+# Node.js / JavaScript / TypeScript
+node_modules/
+dist/
+build/
+.next/
+out/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+.env
+.env.*
+!.env.example
+.cache/
+.parcel-cache/
+.vite/
+coverage/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.log
+postgres-data/
+
+# Infrastructure
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+
+# Bicep generated ARM templates (regenerated at deploy time)
+infrastructure/bicep/*.json
+infrastructure/bicep/generated/
+infrastructure/bicep/modules/*.json
+
+# Secrets
+*.key
+*.crt
+*.pem
+secrets/
+kubeconfig*
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/*.bak
+temp_*.js
+build-output.txt

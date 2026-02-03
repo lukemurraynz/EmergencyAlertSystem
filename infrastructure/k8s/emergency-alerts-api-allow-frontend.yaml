@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: emergency-alerts-api-allow-frontend
+  namespace: emergency-alerts
+spec:
+  podSelector:
+    matchLabels:
+      app: emergency-alerts-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: emergency-alerts-frontend
+      ports:
+        - protocol: TCP
+          port: 5000

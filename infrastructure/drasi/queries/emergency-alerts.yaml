@@ -1,0 +1,318 @@
+# Emergency Alert Core System - Drasi Continuous Queries
+# All queries operate on PostgreSQL CDC from Cosmos DB
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: delivery-trigger
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: recipients
+          - sourceLabel: delivery_attempts
+  query: |
+    MATCH (a:alerts)
+    WHERE a.status = 'Approved' AND a.delivery_status = 'Pending'
+    WITH a
+    MATCH (r:recipients)
+    WHERE r.is_active = true
+    WITH a, r
+    OPTIONAL MATCH (da:delivery_attempts)
+    WHERE da.alert_id = a.alert_id AND da.recipient_id = r.recipient_id
+    WITH a, r, COUNT(da) AS deliveryCount
+    WHERE deliveryCount = 0
+    RETURN
+      a.alert_id AS alertId,
+      r.recipient_id AS recipientId,
+      a.headline AS headline,
+      r.email_address AS email,
+      drasi.changeDateTime(a) AS triggeredAt
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: delivery-sla-breach
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+  query: |
+    MATCH (a:alerts)
+    WHERE a.status = 'PendingApproval'
+    WITH
+      a,
+      a.created_at AS createdAt
+    WHERE
+      drasi.trueLater(a.status = 'PendingApproval', createdAt + duration({ seconds: 60 }))
+    RETURN
+      a.alert_id AS alertId,
+      a.headline AS headline,
+      a.severity AS severity,
+      createdAt AS createdAt,
+      createdAt + duration({ seconds: 60 }) AS breachDetectedAt,
+      60 AS elapsedSeconds
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: approval-timeout
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+  query: |
+    MATCH (a:alerts)
+    WHERE a.status = 'PendingApproval'
+    WITH
+      a,
+      drasi.changeDateTime(a) AS createdAt
+    WHERE
+      drasi.trueLater(a.status = 'PendingApproval', createdAt + duration({ minutes: 5 }))
+    RETURN
+      a.alert_id AS alertId,
+      a.headline AS headline,
+      createdAt AS createdAt,
+      (createdAt + duration({ minutes: 5 })) AS escalatesAt
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: geographic-correlation
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: areas
+  query: |
+    MATCH (a1:alerts), (area1:areas)
+    WHERE area1.alert_id = a1.alert_id
+      AND a1.status IN ['Approved', 'PendingApproval']
+    WITH a1, area1
+    MATCH (a2:alerts), (area2:areas)
+    WHERE area2.alert_id = a2.alert_id
+      AND a2.status IN ['Approved', 'PendingApproval']
+      AND a2.created_at > a1.created_at - duration({ hours: 24 })
+      AND a2.created_at < a1.created_at
+      AND area1.region_code = area2.region_code
+      AND a1.alert_id < a2.alert_id
+    WITH a1, a2, COUNT(area1) AS correlationCount
+    WHERE correlationCount >= 1
+    RETURN
+      a1.alert_id AS alertId1,
+      a2.alert_id AS alertId2,
+      a1.headline AS headline1,
+      a2.headline AS headline2,
+      correlationCount AS correlatedAreas
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: regional-hotspot
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: areas
+  query: |
+    MATCH (a:alerts), (area:areas)
+    WHERE area.alert_id = a.alert_id
+      AND a.status IN ['Approved', 'PendingApproval', 'Delivered']
+    WITH
+      area.region_code AS regionCode,
+      COUNT(a) AS alertCount
+    WHERE alertCount >= 4
+    RETURN
+      regionCode AS hotspotRegion,
+      alertCount AS alertsInRegion
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: severity-escalation
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: areas
+  query: |
+    MATCH (a1:alerts), (area1:areas),
+          (a2:alerts), (area2:areas)
+    WHERE area1.alert_id = a1.alert_id
+      AND area2.alert_id = a2.alert_id
+      AND ST_INTERSECTS(
+        ST_GeomFromText(area1.area_polygon_wkt),
+        ST_GeomFromText(area2.area_polygon_wkt)
+      ) = true
+      AND a2.created_at > a1.created_at - duration({ hours: 24 })
+      AND a1.severity IN ['Moderate']
+      AND a2.severity IN ['Severe', 'Extreme']
+    WITH
+      a1, a2,
+      drasi.previousDistinctValue(a1.severity) AS previousSeverity,
+      a2.severity AS newSeverity
+    WHERE previousSeverity <> newSeverity
+    RETURN
+      a1.alert_id AS alertId1,
+      a2.alert_id AS alertId2,
+      previousSeverity AS previousSeverity,
+      newSeverity AS escalatedSeverity
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: duplicate-suppression
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: areas
+  query: |
+    MATCH (a:alerts), (area:areas)
+    WHERE area.alert_id = a.alert_id
+      AND a.status IN ['PendingApproval', 'Approved', 'Delivered']
+    WITH a, area.region_code AS regionCode
+    MATCH (dup:alerts), (dupArea:areas)
+    WHERE dupArea.alert_id = dup.alert_id
+      AND dupArea.region_code = regionCode
+      AND dup.status IN ['PendingApproval', 'Approved', 'Delivered']
+      AND dup.headline = a.headline
+      AND dup.created_at >= a.created_at - duration({ minutes: 15 })
+      AND dup.created_at < a.created_at
+    RETURN
+      a.alert_id AS alertId,
+      dup.alert_id AS duplicateAlertId,
+      a.headline AS headline,
+      regionCode AS regionCode,
+      a.created_at AS triggeredAt
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: area-expansion-suggestion
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+          - sourceLabel: areas
+  query: |
+    MATCH (a1:alerts), (area1:areas)
+    WHERE area1.alert_id = a1.alert_id
+      AND a1.status IN ['PendingApproval', 'Approved', 'Delivered']
+    WITH a1, area1.region_code AS regionCode1
+    MATCH (a2:alerts), (area2:areas)
+    WHERE area2.alert_id = a2.alert_id
+      AND a2.status IN ['PendingApproval', 'Approved', 'Delivered']
+      AND a2.headline = a1.headline
+      AND area2.region_code <> regionCode1
+      AND a2.created_at >= a1.created_at - duration({ minutes: 30 })
+      AND a2.created_at < a1.created_at
+    WITH a1, a2, regionCode1, area2.region_code AS regionCode2
+    RETURN
+      a1.alert_id AS alertId1,
+      a2.alert_id AS alertId2,
+      a1.headline AS headline,
+      regionCode1 AS regionCode1,
+      regionCode2 AS regionCode2,
+      a1.created_at AS triggeredAt
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: all-clear-suggestion
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+  query: |
+    MATCH (a:alerts)
+    WHERE a.status = 'Delivered'
+      AND a.delivery_status = 'Delivered'
+    WITH
+      a,
+      drasi.changeDateTime(a) AS deliveredAt
+    WHERE
+      drasi.trueLater(a.status = 'Delivered', deliveredAt + duration({ minutes: 30 }))
+    RETURN
+      a.alert_id AS alertId,
+      a.headline AS headline,
+      deliveredAt AS deliveredAt,
+      deliveredAt + duration({ minutes: 30 }) AS suggestedAt
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: expiry-warning
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+  query: |
+    MATCH (a:alerts)
+    WHERE a.status IN ['Approved', 'Delivered', 'PendingApproval']
+    WITH
+      a,
+      a.expires_at AS expiresAt
+    WHERE
+      drasi.trueLater(a.expires_at > datetime.realtime(), 
+                      expiresAt - duration({ minutes: 15 }))
+    RETURN
+      a.alert_id AS alertId,
+      a.headline AS headline,
+      expiresAt AS expiresAt,
+      expiresAt - duration({ minutes: 15 }) AS warningTime
+
+---
+apiVersion: v1
+kind: ContinuousQuery
+name: rate-spike-detection
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+  query: |
+    MATCH (a:alerts)
+    WHERE drasi.changeDateTime(a) IS NOT NULL
+    WITH
+      drasi.changeDateTime(a) AS eventTime,
+      count(a) AS alertCount
+    WHERE
+      drasi.linearGradient(alertCount, duration({ hours: 1 })) > 50
+    RETURN
+      eventTime AS measurementTime,
+      alertCount AS alertsInWindow,
+      drasi.linearGradient(alertCount, duration({ hours: 1 })) AS creationRatePerHour
+

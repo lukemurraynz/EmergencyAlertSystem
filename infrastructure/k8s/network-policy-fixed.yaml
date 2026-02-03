@@ -1,0 +1,202 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: emergency-alerts-network-policy
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts
+spec:
+  podSelector:
+    matchLabels:
+      app: emergency-alerts-api
+  policyTypes:
+    - Ingress
+    - Egress
+
+  # ============================================================================
+  # INGRESS: Accept traffic from ingress controller and pod-to-pod
+  # ============================================================================
+  ingress:
+    # Allow from nginx ingress controller (port 5000)
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+      ports:
+      - protocol: TCP
+        port: 5000
+
+    # Allow Drasi reaction callbacks from drasi-system namespace
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: drasi-system
+      ports:
+      - protocol: TCP
+        port: 5000
+    
+    # Allow pod-to-pod communication on port 5000
+    - from:
+      - podSelector:
+          matchLabels:
+            app: emergency-alerts-api
+      ports:
+      - protocol: TCP
+        port: 5000
+
+  # ============================================================================
+  # EGRESS: Allow external Azure services + internal k8s traffic
+  # ============================================================================
+  # Security Best Practice: This policy restricts egress to:
+  # 1. Kubernetes namespaces (pod-to-pod within cluster)
+  # 2. Azure services ONLY (40.0.0.0/8 - Microsoft's global Azure IP range)
+  # 3. Specific ports: DNS, HTTP, HTTPS, PostgreSQL, MySQL, Redis
+  #
+  # This prevents accidental/malicious connections to arbitrary internet hosts
+  # while allowing all Azure services (App Config, Key Vault, PostgreSQL, etc.)
+  #
+  # PRODUCTION HARDENING: Consider using Private Endpoints for Azure services
+  # See: https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
+  egress:
+    # Allow pod-to-pod communication within Kubernetes cluster
+    - to:
+      - namespaceSelector: {}
+      - podSelector: {}
+      ports:
+      - protocol: TCP
+        port: 53   # DNS
+      - protocol: UDP
+        port: 53   # DNS
+      - protocol: TCP
+        port: 80   # HTTP
+      - protocol: TCP
+        port: 443  # HTTPS
+    
+    # Allow connections to Azure services ONLY (40.0.0.0/8)
+    # This CIDR range covers:
+    # - Azure SQL Database & PostgreSQL Flexible Server
+    # - Azure App Configuration
+    # - Azure Key Vault
+    # - Azure Container Registry
+    # - Azure cosmos DB
+    # - All other Azure services
+    #
+    # See: https://www.microsoft.com/download/details.aspx?id=56519
+    - to:
+      - ipBlock:
+          cidr: 40.0.0.0/8
+      ports:
+      - protocol: TCP
+        port: 53   # DNS
+      - protocol: UDP
+        port: 53   # DNS
+      - protocol: TCP
+        port: 80   # HTTP
+      - protocol: TCP
+        port: 443  # HTTPS (most Azure services)
+      - protocol: TCP
+        port: 5432 # PostgreSQL
+      - protocol: TCP
+        port: 3306 # MySQL
+      - protocol: TCP
+        port: 6379 # Redis
+
+    # Allow PostgreSQL access to the current server public IP (fallback for non-40.x ranges)
+    # NOTE: Update this if the PostgreSQL public IP changes.
+    - to:
+      - ipBlock:
+          cidr: 20.58.187.206/32
+      ports:
+      - protocol: TCP
+        port: 5432
+
+    # Allow HTTPS to external identity endpoints (e.g., Entra ID token exchange)
+    - to:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      ports:
+      - protocol: TCP
+        port: 443
+    
+    # Allow DNS resolution for external names (essential for Azure service discovery)
+    - ports:
+      - protocol: TCP
+        port: 53
+      - protocol: UDP
+        port: 53
+
+---
+# Optional: Network Policy for frontend (if deployed to K8s)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: emergency-alerts-frontend-policy
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts
+spec:
+  podSelector:
+    matchLabels:
+      app: emergency-alerts-frontend
+  policyTypes:
+    - Ingress
+    - Egress
+  
+  ingress:
+    # Allow from nginx ingress controller (port 3000)
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+      ports:
+      - protocol: TCP
+        port: 3000
+  
+  egress:
+    # Allow frontend to call backend API
+    - to:
+      - podSelector:
+          matchLabels:
+            app: emergency-alerts-api
+      ports:
+      - protocol: TCP
+        port: 5000
+    
+    # Allow DNS (essential for all external connectivity)
+    - ports:
+      - protocol: UDP
+        port: 53
+      - protocol: TCP
+        port: 53
+    
+    # Allow external HTTPS to Azure services only (40.0.0.0/8)
+    # Covers: CDNs, analytics services hosted in Azure, etc.
+    - to:
+      - ipBlock:
+          cidr: 40.0.0.0/8
+      ports:
+      - protocol: TCP
+        port: 443
+
+---
+# Allow cert-manager webhook in namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cert-manager
+  namespace: emergency-alerts
+spec:
+  podSelector:
+    matchLabels:
+      app: emergency-alerts-api
+  policyTypes:
+    - Egress
+  egress:
+    # Allow webhook callback from cert-manager
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: cert-manager
+      ports:
+      - protocol: TCP
+        port: 443

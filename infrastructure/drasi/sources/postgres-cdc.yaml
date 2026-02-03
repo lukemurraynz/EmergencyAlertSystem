@@ -1,0 +1,20 @@
+# Drasi CDC Source Configuration for PostgreSQL Elastic Cluster
+apiVersion: v1
+kind: Source
+name: postgres-alerts
+spec:
+  kind: PostgreSQL
+  properties:
+    host: ${POSTGRES_HOST}
+    port: ${POSTGRES_PORT}
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    database: ${POSTGRES_DATABASE}
+    ssl: true
+    tables:
+      - emergency_alerts.alerts
+      - emergency_alerts.areas
+      - emergency_alerts.recipients
+      - emergency_alerts.delivery_attempts
+      - emergency_alerts.approval_records
+      - emergency_alerts.correlation_events

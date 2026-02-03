@@ -1,0 +1,28 @@
+# SLA Countdown Timer - Showcases Drasi's predictive capabilities
+# Shows alerts approaching SLA breach with live countdown (Drasi's killer feature)
+# Timer starts from alert creation (PendingApproval status)
+apiVersion: v1
+kind: ContinuousQuery
+name: sla-countdown
+spec:
+  mode: query
+  sources:
+    subscriptions:
+      - id: postgres-alerts
+        nodes:
+          - sourceLabel: alerts
+  query: |
+    MATCH (a:alerts)
+    WHERE a.status = 'PendingApproval'
+    WITH a,
+         a.created_at AS createdAt,
+         duration.inSeconds(datetime.realtime(), a.created_at) AS elapsedSeconds
+    WHERE elapsedSeconds >= 0 AND elapsedSeconds < 60
+    RETURN
+      a.alert_id AS alertId,
+      a.headline AS headline,
+      a.severity AS severity,
+      elapsedSeconds AS secondsElapsed,
+      (60 - elapsedSeconds) AS secondsRemaining,
+      createdAt AS createdAt,
+      (createdAt + duration({ seconds: 60 })) AS breachAt

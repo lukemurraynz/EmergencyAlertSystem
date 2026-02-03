@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    />
+    <title>Emergency Alerts System</title>
+    <script>
+      (function () {
+        function getRandomBytes() {
+          var bytes = new Uint8Array(16)
+          var cryptoRef = globalThis.crypto
+          if (cryptoRef && typeof cryptoRef.getRandomValues === 'function') {
+            cryptoRef.getRandomValues(bytes)
+            return bytes
+          }
+          for (var i = 0; i < bytes.length; i += 1) {
+            bytes[i] = Math.floor(Math.random() * 256)
+          }
+          return bytes
+        }
+
+        function fallbackRandomUUID() {
+          var bytes = getRandomBytes()
+          if (bytes.length >= 9) {
+            bytes[6] = (bytes[6] & 0x0f) | 0x40
+            bytes[8] = (bytes[8] & 0x3f) | 0x80
+          }
+          var hex = Array.prototype.map.call(bytes, function (byte) {
+            return byte.toString(16).padStart(2, '0')
+          })
+          return (
+            hex[0] +
+            hex[1] +
+            hex[2] +
+            hex[3] +
+            '-' +
+            hex[4] +
+            hex[5] +
+            '-' +
+            hex[6] +
+            hex[7] +
+            '-' +
+            hex[8] +
+            hex[9] +
+            '-' +
+            hex[10] +
+            hex[11] +
+            hex[12] +
+            hex[13] +
+            hex[14] +
+            hex[15]
+          )
+        }
+
+        try {
+          if (!globalThis.crypto) {
+            globalThis.crypto = {}
+          }
+          if (typeof globalThis.crypto.getRandomValues !== 'function') {
+            globalThis.crypto.getRandomValues = function (array) {
+              var bytes = new Uint8Array(array.buffer, array.byteOffset, array.byteLength)
+              for (var i = 0; i < bytes.length; i += 1) {
+                bytes[i] = Math.floor(Math.random() * 256)
+              }
+              return array
+            }
+          }
+          if (typeof globalThis.crypto.randomUUID !== 'function') {
+            try {
+              Object.defineProperty(globalThis.crypto, 'randomUUID', {
+                value: fallbackRandomUUID,
+                writable: false,
+                configurable: true,
+              })
+            } catch (err) {
+              globalThis.crypto.randomUUID = fallbackRandomUUID
+            }
+          }
+        } catch (err) {
+          globalThis.crypto = {
+            getRandomValues: function (array) {
+              var bytes = new Uint8Array(array.buffer, array.byteOffset, array.byteLength)
+              for (var i = 0; i < bytes.length; i += 1) {
+                bytes[i] = Math.floor(Math.random() * 256)
+              }
+              return array
+            },
+            randomUUID: fallbackRandomUUID,
+          }
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

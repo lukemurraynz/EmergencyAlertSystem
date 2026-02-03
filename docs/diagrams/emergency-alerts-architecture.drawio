@@ -1,0 +1,1342 @@
+<mxfile host="app.diagrams.net" modified="2026-02-03T00:00:00.000Z" agent="Diagram Smith" version="22.0.0">
+  <diagram name="00 - Index" id="index-sheet">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title" value="Emergency Alerts System - Architecture Documentation" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="125" y="40" width="600" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="purpose" value="Purpose: Real-time emergency alert management system for creating, approving, and delivering alerts to affected populations via Azure Communication Services." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="125" y="90" width="600" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheets_title" value="Diagram Sheets" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="200" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheet1_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="190" width="300" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet1_title" value="01 - C4 Context" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="110" y="200" width="150" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet1_desc" value="High-level view showing users, the system boundary, and external dependencies (Azure services, email recipients)." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="110" y="220" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheet2_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="450" y="190" width="300" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet2_title" value="02 - C4 Container" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="460" y="200" width="150" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet2_desc" value="Azure infrastructure: AKS cluster, PostgreSQL, App Configuration, Key Vault, ACR, ACS, Azure Maps." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="460" y="220" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheet3_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="100" y="290" width="300" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet3_title" value="03 - Alert Lifecycle" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="110" y="300" width="150" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet3_desc" value="Data flow from alert creation through approval to delivery. Shows state machine and Drasi CDC triggers." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="110" y="320" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheet4_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="450" y="290" width="300" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet4_title" value="04 - AKS Components" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="460" y="300" width="150" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet4_desc" value="Kubernetes deployments, services, ingress, Drasi system namespace, and workload identity setup." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="460" y="320" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheet5_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="100" y="390" width="300" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet5_title" value="05 - Drasi CDC Detail" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="110" y="400" width="150" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet5_desc" value="PostgreSQL source tables, all 12 continuous queries (delivery, SLA, correlation, operational), HTTP reactions." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="110" y="420" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sheet6_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="450" y="390" width="300" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet6_title" value="06 - End-to-End Flow (Drasi)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="460" y="400" width="230" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="sheet6_desc" value="Single-view walkthrough: Alert Approval → Drasi CDC → Query → Reaction → Email Delivery. Includes latency breakdown and CAP alignment." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="460" y="420" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="legend_title" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="100" y="510" width="100" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="540" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1_t" value="System Boundary / Context" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="130" y="535" width="170" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="100" y="565" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2_t" value="Azure Resources / Containers" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="130" y="560" width="170" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="100" y="590" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3_t" value="Data Flow / Process / Drasi" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="130" y="585" width="170" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="615" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4_t" value="Kubernetes / Internal" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="130" y="610" width="170" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="key_tech" value="Key Technologies" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="400" y="510" width="150" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="tech_list" value="• Frontend: React 19, Vite, Fluent UI, Azure Maps SDK&#xa;• Backend: ASP.NET Core, Entity Framework, SignalR&#xa;• Database: PostgreSQL Flexible Server + PostGIS&#xa;• CDC: Drasi (Source → Queries → Reactions)&#xa;• Infra: AKS, Bicep, Workload Identity&#xa;• Delivery: Azure Communication Services (Email)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="400" y="540" width="350" height="100" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="01 - C4 Context" id="c4-context">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title_c1" value="Emergency Alerts System - C4 Context Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- Users on left -->
+        <mxCell id="operator" value="Operator&#xa;[Person]&#xa;&#xa;Creates and manages&#xa;emergency alerts" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="200" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="operator_label" value="Operator" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="290" width="100" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="approver" value="Approver&#xa;[Person]&#xa;&#xa;Reviews and approves&#xa;or rejects alerts" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="approver_label" value="Approver" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="490" width="100" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- System Boundary -->
+        <mxCell id="system_boundary" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="120" width="500" height="500" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="system_title" value="Emergency Alerts System&#xa;[Software System]&#xa;&#xa;Manages emergency alerts from creation&#xa;through approval to delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=14;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="300" height="120" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="web_app" value="Web Application&#xa;[React SPA]&#xa;&#xa;Dashboard for alert&#xa;management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="340" y="160" width="140" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="api" value="Alerts API&#xa;[ASP.NET Core]&#xa;&#xa;REST API + SignalR&#xa;for real-time updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="520" y="160" width="140" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="db" value="Database&#xa;[PostgreSQL + PostGIS]&#xa;&#xa;Alerts, areas, approvals,&#xa;delivery attempts" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="340" y="450" width="140" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="cdc" value="Drasi CDC&#xa;[Continuous Queries]&#xa;&#xa;Event-driven triggers&#xa;for delivery, SLA, etc." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="520" y="460" width="140" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- External Systems on right -->
+        <mxCell id="acs" value="Azure Communication&#xa;Services&#xa;[External Service]&#xa;&#xa;Email delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="950" y="150" width="150" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="maps" value="Azure Maps&#xa;[External Service]&#xa;&#xa;Map tiles, geocoding,&#xa;SAS tokens" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="950" y="280" width="150" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="appconfig" value="Azure App Config&#xa;[External Service]&#xa;&#xa;Feature flags,&#xa;configuration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="950" y="410" width="150" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="keyvault" value="Azure Key Vault&#xa;[External Service]&#xa;&#xa;Secrets, certificates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="950" y="540" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- Recipients -->
+        <mxCell id="recipients" value="Email Recipients&#xa;[External]&#xa;&#xa;People in affected&#xa;areas receive alerts" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="200" width="40" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="recipients_label" value="Recipients" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="290" width="100" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Connections -->
+        <mxCell id="e_op_web" value="Uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="operator" target="web_app">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_ap_web" value="Uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="approver" target="system_title">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_web_api" value="API calls&#xa;SignalR" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="web_app" target="api">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_api_db" value="Read/Write" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api" target="db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="420"/>
+              <mxPoint x="410" y="420"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_db_cdc" value="CDC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="db" target="cdc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_cdc_api" value="HTTP&#xa;Reactions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="cdc" target="api">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="500"/>
+              <mxPoint x="700" y="200"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_api_acs" value="Send Email" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api" target="acs">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_web_maps" value="Map Tiles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="web_app" target="maps">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="130"/>
+              <mxPoint x="900" y="130"/>
+              <mxPoint x="900" y="330"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_api_appconfig" value="Config" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api" target="appconfig">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="200"/>
+              <mxPoint x="860" y="460"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_api_kv" value="Secrets" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api" target="keyvault">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="200"/>
+              <mxPoint x="880" y="585"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_acs_recip" value="Delivers" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="acs" target="recipients">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="02 - C4 Container" id="c4-container">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title_c2" value="Emergency Alerts System - C4 Container (Azure Infrastructure)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- Azure Subscription Boundary -->
+        <mxCell id="azure_boundary" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#0078D4;strokeWidth=3;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1320" height="880" as="geometry"/>
+        </mxCell>
+        <mxCell id="azure_label" value="Azure Subscription" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#0078D4;" vertex="1" parent="1">
+          <mxGeometry x="50" y="75" width="150" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Resource Group -->
+        <mxCell id="rg_boundary" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F2FF;strokeColor=#0078D4;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="1280" height="830" as="geometry"/>
+        </mxCell>
+        <mxCell id="rg_label" value="Resource Group: emergency-alerts-prod-rg" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#0078D4;" vertex="1" parent="1">
+          <mxGeometry x="70" y="105" width="280" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- AKS Cluster -->
+        <mxCell id="aks_boundary" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="140" width="700" height="400" as="geometry"/>
+        </mxCell>
+        <mxCell id="aks_label" value="AKS Cluster: emergency-alerts-prod-aks" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="90" y="145" width="280" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Namespace: emergency-alerts -->
+        <mxCell id="ns_ea" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="180" width="400" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="ns_ea_label" value="namespace: emergency-alerts" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="105" y="182" width="180" height="15" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="frontend_pod" value="Frontend&#xa;[React SPA]&#xa;&#xa;3 replicas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="210" width="120" height="70" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="api_pod" value="API&#xa;[ASP.NET Core]&#xa;&#xa;3 replicas, HPA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="260" y="210" width="120" height="70" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ingress" value="Ingress&#xa;[NGINX]&#xa;&#xa;TLS termination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="295" width="260" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Namespace: drasi-system -->
+        <mxCell id="ns_drasi" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="180" width="240" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="ns_drasi_label" value="namespace: drasi-system" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="525" y="182" width="150" height="15" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_source" value="Source&#xa;[postgres-alerts]&#xa;&#xa;CDC replication" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="535" y="210" width="100" height="70" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_queries" value="Queries&#xa;[8 continuous]&#xa;&#xa;Delivery, SLA,&#xa;Correlations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="645" y="210" width="100" height="70" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_reactions" value="Reactions&#xa;[HTTP]&#xa;&#xa;Calls API endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="590" y="295" width="110" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Workload Identity -->
+        <mxCell id="wi_box" value="Workload Identity&#xa;[Managed Identity]&#xa;&#xa;Federated credentials&#xa;for Azure access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="390" width="160" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- Service Account -->
+        <mxCell id="sa_box" value="ServiceAccount&#xa;emergency-alerts-sa&#xa;&#xa;OIDC token projection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="280" y="390" width="160" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- Network Policy -->
+        <mxCell id="netpol" value="NetworkPolicy&#xa;[Default Deny + Allow]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="460" y="400" width="140" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- HPA -->
+        <mxCell id="hpa" value="HPA&#xa;[CPU/Memory]&#xa;3-10 replicas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="620" y="400" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Azure Services (right side) -->
+        <mxCell id="postgres" value="PostgreSQL&#xa;Flexible Server&#xa;[PostGIS enabled]&#xa;&#xa;Alerts, Areas,&#xa;Approvals, Delivery" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="850" y="160" width="150" height="120" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="acr" value="Container Registry&#xa;[ACR]&#xa;&#xa;API + Frontend images" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="160" width="140" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="appconfig2" value="App Configuration&#xa;[Feature Flags]&#xa;&#xa;CORS, Email settings,&#xa;Drasi config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="850" y="310" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="keyvault2" value="Key Vault&#xa;[Secrets]&#xa;&#xa;DB password,&#xa;API keys" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="310" width="140" height="90" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="acs2" value="Communication&#xa;Services&#xa;[Email]&#xa;&#xa;Alert delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="850" y="430" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="maps2" value="Azure Maps&#xa;[Gen2]&#xa;&#xa;Map tiles,&#xa;SAS tokens" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="430" width="140" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- Managed Identity -->
+        <mxCell id="mi" value="Managed Identity&#xa;[User Assigned]&#xa;&#xa;emergency-alerts-prod-identity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="920" y="560" width="200" height="70" as="geometry"/>
+        </mxCell>
+        
+        <!-- Connections -->
+        <mxCell id="e_api_pg" value="EF Core" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api_pod" target="postgres">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_drasi_pg" value="CDC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="drasi_source" target="postgres">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="245"/>
+              <mxPoint x="800" y="220"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_reaction_api" value="HTTP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="drasi_reactions" target="api_pod">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="320"/>
+              <mxPoint x="480" y="245"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_api_acs2" value="Send" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api_pod" target="acs2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="480"/>
+              <mxPoint x="800" y="480"/>
+              <mxPoint x="800" y="475"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_api_appconfig2" value="Config" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api_pod" target="appconfig2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="e_api_kv2" value="Secrets" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="api_pod" target="keyvault2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="355"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_fe_maps" value="Tiles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="frontend_pod" target="maps2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="500"/>
+              <mxPoint x="1120" y="500"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_aks_acr" value="Pull" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="aks_boundary" target="acr">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="780" y="150"/>
+              <mxPoint x="1120" y="150"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e_wi_mi" value="Federated" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="wi_box" target="mi">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="570"/>
+              <mxPoint x="180" y="595"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Data Flow Labels -->
+        <mxCell id="flow_note" value="Data Flow:&#xa;1. User → Ingress → Frontend/API&#xa;2. API ↔ PostgreSQL (EF Core)&#xa;3. PostgreSQL → Drasi CDC → Queries → Reactions&#xa;4. Reactions → API → ACS (Email)" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="280" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- Security Note -->
+        <mxCell id="sec_note" value="Security:&#xa;• Workload Identity (no secrets in pods)&#xa;• Network Policy (default deny)&#xa;• Key Vault for all secrets&#xa;• TLS everywhere" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="670" width="220" height="90" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="03 - Alert Lifecycle" id="alert-lifecycle">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title_lc" value="Alert Lifecycle - State Machine &amp; Data Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- State Machine -->
+        <mxCell id="sm_title" value="Alert State Machine" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="70" width="200" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="state_pending" value="pending_approval" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="130" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="state_approved" value="approved" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="120" width="100" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="state_rejected" value="rejected" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="220" width="100" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="state_delivered" value="delivered" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="100" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="state_cancelled" value="cancelled" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="220" width="100" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="state_expired" value="expired" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="510" y="220" width="100" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- State transitions -->
+        <mxCell id="t_approve" value="approve()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="state_pending" target="state_approved">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_reject" value="reject()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="state_pending" target="state_rejected">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_deliver" value="deliver()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="state_approved" target="state_delivered">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_cancel1" value="cancel()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="state_approved" target="state_cancelled">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_cancel2" value="cancel()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="state_delivered" target="state_cancelled">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="200"/>
+              <mxPoint x="415" y="200"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="t_expire" value="expiresAt reached" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="state_delivered" target="state_expired">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- Drasi Triggers Section -->
+        <mxCell id="drasi_title" value="Drasi CDC Triggers (Continuous Queries)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="310" width="350" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="340" width="600" height="220" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_delivery" value="delivery-trigger&#xa;&#xa;When: status = approved&#xa;AND deliveryStatus = pending&#xa;Action: HTTP → DeliverAlert" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="180" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_sla" value="sla-breach&#xa;&#xa;When: approved &gt;60s ago&#xa;AND not delivered&#xa;Action: HTTP → SLABreach" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="360" width="180" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_geo" value="geographic-correlation&#xa;&#xa;When: multiple alerts&#xa;in overlapping areas&#xa;Action: HTTP → Correlate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="180" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_timeout" value="approval-timeout&#xa;&#xa;When: pending &gt;24h&#xa;Action: HTTP → AutoReject" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="460" width="180" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_more" value="+ 4 more queries:&#xa;• severity-escalation&#xa;• expiry-warning&#xa;• rate-spike-detection&#xa;• regional-hotspot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="480" y="360" width="160" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- Data Flow Section -->
+        <mxCell id="flow_title" value="End-to-End Data Flow" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="70" width="200" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Flow steps -->
+        <mxCell id="flow1" value="1. Operator creates alert&#xa;[POST /api/v1/alerts]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="720" y="100" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow2" value="2. API validates &amp; saves&#xa;[PostgreSQL INSERT]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="170" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow3" value="3. SignalR broadcasts&#xa;[Dashboard updates]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="720" y="240" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow4" value="4. Approver reviews&#xa;[POST /alerts/{id}/approval]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="720" y="310" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow5" value="5. Drasi detects change&#xa;[CDC replication slot]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="720" y="380" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow6" value="6. Query matches trigger&#xa;[delivery-trigger fires]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="720" y="450" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow7" value="7. Reaction calls API&#xa;[POST /drasi/reactions/delivery]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="720" y="520" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow8" value="8. API sends via ACS&#xa;[Azure Communication Services]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="720" y="590" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="flow9" value="9. Email delivered&#xa;[Recipients notified]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="660" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Flow arrows -->
+        <mxCell id="f_arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow1" target="flow2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow2" target="flow3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow3" target="flow4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow4" target="flow5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow5" target="flow6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow6" target="flow7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow7" target="flow8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="f_arrow8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="flow8" target="flow9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- Timing annotations -->
+        <mxCell id="timing_box" value="SLA Targets:&#xa;• Alert creation: &lt;3 min&#xa;• Approval: &lt;1 min&#xa;• Delivery: &lt;60s after approval&#xa;• Dashboard update: &lt;2s" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="950" y="100" width="180" height="100" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="04 - AKS Components" id="aks-components">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title_aks" value="AKS Cluster - Kubernetes Components" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="500" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- Cluster boundary -->
+        <mxCell id="cluster_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F2FF;strokeColor=#0078D4;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1320" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="cluster_label" value="AKS Cluster: emergency-alerts-prod-aks (Azure CNI + Cilium)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontColor=#0078D4;" vertex="1" parent="1">
+          <mxGeometry x="50" y="65" width="400" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Namespace: emergency-alerts -->
+        <mxCell id="ns1_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="620" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="ns1_label" value="namespace: emergency-alerts" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="105" width="200" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Deployments -->
+        <mxCell id="dep_api" value="Deployment: emergency-alerts-api&#xa;&#xa;replicas: 3 (HPA: 3-10)&#xa;image: $ACR/emergency-alerts-api:$TAG&#xa;ports: 8080 (http)&#xa;&#xa;Probes:&#xa;  liveness: /health/live&#xa;  readiness: /health/ready&#xa;&#xa;Resources:&#xa;  requests: 250m CPU, 512Mi&#xa;  limits: 1 CPU, 1Gi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="80" y="140" width="250" height="180" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="dep_fe" value="Deployment: emergency-alerts-frontend&#xa;&#xa;replicas: 2&#xa;image: $ACR/emergency-alerts-frontend:$TAG&#xa;ports: 80 (http)&#xa;&#xa;env:&#xa;  VITE_API_URL (build-time)&#xa;&#xa;Resources:&#xa;  requests: 100m CPU, 128Mi&#xa;  limits: 500m CPU, 256Mi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="350" y="140" width="250" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- Services -->
+        <mxCell id="svc_api" value="Service: emergency-alerts-api&#xa;type: ClusterIP&#xa;port: 80 → 8080" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="svc_fe" value="Service: emergency-alerts-frontend&#xa;type: ClusterIP&#xa;port: 80 → 80" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="340" width="190" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Ingress -->
+        <mxCell id="ingress_k8s" value="Ingress: emergency-alerts-ingress&#xa;class: nginx&#xa;TLS: Let's Encrypt&#xa;&#xa;Rules:&#xa;  / → frontend:80&#xa;  /api/* → api:80&#xa;  /hubs/* → api:80 (WebSocket)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="490" y="330" width="180" height="110" as="geometry"/>
+        </mxCell>
+        
+        <!-- ConfigMap & Secrets -->
+        <mxCell id="cm" value="ConfigMap: api-config&#xa;&#xa;Cors__AllowedOrigins&#xa;Drasi__HealthEndpoint&#xa;Logging__LogLevel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="180" height="90" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="secret" value="Secret: emergency-alerts-db-credentials&#xa;(from Key Vault via CSI)&#xa;&#xa;ConnectionStrings__EmergencyAlertsDb" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="280" y="400" width="250" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- Network Policy -->
+        <mxCell id="netpol_k8s" value="NetworkPolicy: default-deny + allow-frontend&#xa;&#xa;Ingress: Allow nginx-ingress → api, frontend&#xa;Egress: Allow api → postgres, acs, appconfig, keyvault" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="550" y="400" width="120" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- Namespace: drasi-system -->
+        <mxCell id="ns2_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="700" y="100" width="320" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="ns2_label" value="namespace: drasi-system" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="105" width="180" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Drasi components -->
+        <mxCell id="drasi_ctrl" value="Drasi Control Plane&#xa;&#xa;drasi-api&#xa;drasi-query-container&#xa;drasi-source-manager&#xa;drasi-reaction-manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="140" width="180" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_source_k8s" value="Source: postgres-alerts&#xa;&#xa;type: PostgreSQL&#xa;tables: alerts, areas,&#xa;  delivery_attempts,&#xa;  correlation_events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="260" width="130" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_queries_k8s" value="ContinuousQueries (8):&#xa;&#xa;• delivery-trigger&#xa;• sla-breach&#xa;• geographic-correlation&#xa;• approval-timeout&#xa;• severity-escalation&#xa;• expiry-warning&#xa;• rate-spike-detection&#xa;• regional-hotspot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="865" y="260" width="140" height="150" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="drasi_reaction_k8s" value="Reaction: http-alerts&#xa;&#xa;target: API /drasi/reactions/*&#xa;auth: X-Reaction-Token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="375" width="180" height="65" as="geometry"/>
+        </mxCell>
+        
+        <!-- Workload Identity Section -->
+        <mxCell id="wi_section" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="510" width="620" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="wi_label" value="Workload Identity Federation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="515" width="250" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="sa_k8s" value="ServiceAccount&#xa;emergency-alerts-sa&#xa;&#xa;annotations:&#xa;  azure.workload.identity/&#xa;    client-id: &lt;mi-client-id&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="80" y="545" width="180" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="mi_k8s" value="Managed Identity&#xa;emergency-alerts-prod-identity&#xa;&#xa;Roles:&#xa;• App Config Data Reader&#xa;• Key Vault Secrets User&#xa;• ACS Email Sender&#xa;• Azure Maps Data Reader" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="280" y="545" width="200" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="fed_cred" value="Federated Credential&#xa;&#xa;issuer: AKS OIDC&#xa;subject: system:serviceaccount:&#xa;  emergency-alerts:&#xa;  emergency-alerts-sa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="500" y="545" width="170" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- HPA Section -->
+        <mxCell id="hpa_section" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="700" y="510" width="320" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="hpa_label" value="Autoscaling &amp; Resilience" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="515" width="200" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="hpa_k8s" value="HPA: emergency-alerts-api&#xa;&#xa;minReplicas: 3&#xa;maxReplicas: 10&#xa;targetCPU: 70%&#xa;targetMemory: 80%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="545" width="140" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="pdb_k8s" value="PDB: emergency-alerts-api&#xa;&#xa;minAvailable: 2&#xa;&#xa;(Ensures availability&#xa;during node drains)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="875" y="545" width="130" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- External connections -->
+        <mxCell id="ext_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="100" width="300" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext_label" value="External Azure Services" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="105" width="180" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ext_pg" value="PostgreSQL Flexible Server&#xa;&#xa;emergencyalerts2-prod-pg&#xa;PostGIS enabled&#xa;SSL required" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="140" width="180" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ext_appconfig" value="App Configuration&#xa;&#xa;Feature flags, CORS,&#xa;Email settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="235" width="180" height="65" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ext_kv" value="Key Vault&#xa;&#xa;DB password, API keys" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="235" width="80" height="65" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ext_acs" value="Communication Services&#xa;&#xa;Email delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="315" width="130" height="55" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ext_maps" value="Azure Maps&#xa;&#xa;Map tiles, SAS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="315" width="130" height="55" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ext_acr" value="ACR&#xa;&#xa;Container images" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="385" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Key connections -->
+        <mxCell id="conn_api_pg" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="dep_api" target="ext_pg">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="conn_drasi_pg" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d6b656;" edge="1" parent="1" source="drasi_source_k8s" target="ext_pg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="310"/>
+              <mxPoint x="1030" y="180"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="05 - Drasi CDC Detail" id="drasi-detail">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title_drasi" value="Drasi CDC Architecture - Source → Queries → Reactions" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- PostgreSQL Source -->
+        <mxCell id="pg_source_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="200" height="380" as="geometry"/>
+        </mxCell>
+        <mxCell id="pg_source_label" value="PostgreSQL (Source)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="85" width="200" height="25" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="pg_db" value="Database&#xa;emergency_alerts" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="75" y="120" width="130" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="tbl_alerts" value="alerts&#xa;&#xa;alert_id, status,&#xa;headline, severity,&#xa;delivery_status,&#xa;created_at, expires_at" style="shape=table;startSize=25;container=1;collapsible=0;childLayout=tableLayout;fontStyle=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="55" y="195" width="170" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="tbl_areas" value="areas&#xa;&#xa;alert_id, region_code,&#xa;area_polygon_wkt" style="shape=table;startSize=25;container=1;collapsible=0;childLayout=tableLayout;fontStyle=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="55" y="285" width="170" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="tbl_recipients" value="recipients&#xa;&#xa;recipient_id, email,&#xa;is_active" style="shape=table;startSize=25;container=1;collapsible=0;childLayout=tableLayout;fontStyle=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="55" y="355" width="170" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="tbl_delivery" value="delivery_attempts&#xa;&#xa;alert_id, recipient_id,&#xa;status, sent_at" style="shape=table;startSize=25;container=1;collapsible=0;childLayout=tableLayout;fontStyle=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="55" y="415" width="170" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- Drasi Source -->
+        <mxCell id="drasi_src_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="160" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="drasi_src_label" value="Drasi Source" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="280" y="85" width="160" height="25" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="src_postgres" value="postgres-alerts&#xa;&#xa;type: PostgreSQL&#xa;mode: CDC&#xa;replication: logical&#xa;&#xa;tables:&#xa;• alerts&#xa;• areas&#xa;• recipients&#xa;• delivery_attempts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="295" y="115" width="130" height="135" as="geometry"/>
+        </mxCell>
+        
+        <!-- Continuous Queries -->
+        <mxCell id="queries_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="520" height="400" as="geometry"/>
+        </mxCell>
+        <mxCell id="queries_label" value="Continuous Queries (Cypher)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="480" y="85" width="520" height="25" as="geometry"/>
+        </mxCell>
+        
+        <!-- Delivery queries -->
+        <mxCell id="q_cat_delivery" value="Delivery &amp; SLA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="495" y="115" width="100" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_del_trigger" value="delivery-trigger&#xa;&#xa;Fires when:&#xa;status = Approved AND&#xa;delivery_status = Pending AND&#xa;no delivery_attempts exist&#xa;&#xa;Output: alertId, recipientId,&#xa;email, headline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="495" y="140" width="155" height="120" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_sla_breach" value="delivery-sla-breach&#xa;&#xa;Fires when:&#xa;status = PendingApproval&#xa;for &gt;60 seconds&#xa;&#xa;Output: alertId, severity,&#xa;elapsedSeconds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="140" width="155" height="120" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_approval_to" value="approval-timeout&#xa;&#xa;Fires when:&#xa;status = PendingApproval&#xa;for &gt;5 minutes&#xa;&#xa;Output: alertId, headline,&#xa;escalatesAt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="825" y="140" width="155" height="120" as="geometry"/>
+        </mxCell>
+        
+        <!-- Correlation queries -->
+        <mxCell id="q_cat_corr" value="Geographic &amp; Correlation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="495" y="270" width="160" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_geo_corr" value="geographic-correlation&#xa;&#xa;Fires when: 2+ alerts&#xa;share region_code within 24h&#xa;&#xa;Output: alertId1, alertId2,&#xa;correlatedAreas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="495" y="295" width="155" height="95" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_hotspot" value="regional-hotspot&#xa;&#xa;Fires when: 4+ active&#xa;alerts in same region&#xa;&#xa;Output: hotspotRegion,&#xa;alertsInRegion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="295" width="155" height="95" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_sev_esc" value="severity-escalation&#xa;&#xa;Fires when: overlapping&#xa;area escalates Moderate →&#xa;Severe/Extreme&#xa;&#xa;Output: alertId1, alertId2,&#xa;previousSeverity, escalated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="825" y="295" width="155" height="95" as="geometry"/>
+        </mxCell>
+        
+        <!-- Operational queries -->
+        <mxCell id="q_cat_ops" value="Operational" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="495" y="400" width="100" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_dup_sup" value="duplicate-suppression&#xa;&#xa;Fires when: same headline&#xa;in region within 15 min" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="495" y="425" width="130" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_expiry" value="expiry-warning&#xa;&#xa;Fires 15 min before&#xa;alert expires_at" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="635" y="425" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_rate" value="rate-spike-detection&#xa;&#xa;Fires when: &gt;50 alerts/hr&#xa;creation rate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="765" y="425" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="q_allclear" value="all-clear-suggestion&#xa;&#xa;Fires 30 min after&#xa;delivered" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="895" y="425" width="90" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Reactions -->
+        <mxCell id="reactions_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="80" width="160" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="reactions_label" value="HTTP Reaction" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="85" width="160" height="25" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="reaction_http" value="http-alerts&#xa;&#xa;Target:&#xa;POST /api/v1/drasi/&#xa;  reactions/{query}&#xa;&#xa;Auth:&#xa;X-Reaction-Token&#xa;&#xa;Payload:&#xa;Query result JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="115" width="130" height="135" as="geometry"/>
+        </mxCell>
+        
+        <!-- API Target -->
+        <mxCell id="api_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="300" width="320" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="api_label" value="Emergency Alerts API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="305" width="320" height="25" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="ctrl_drasi" value="DrasiReactionsController&#xa;&#xa;/drasi/reactions/delivery-trigger&#xa;/drasi/reactions/sla-breach&#xa;/drasi/reactions/approval-timeout&#xa;/drasi/reactions/geographic-correlation&#xa;/drasi/reactions/severity-escalation&#xa;/drasi/reactions/regional-hotspot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="335" width="190" height="130" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actions_box" value="Actions:&#xa;&#xa;• Send via ACS&#xa;• Update dashboard&#xa;• Log correlation&#xa;• Escalate severity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;verticalAlign=top;spacingTop=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1255" y="335" width="95" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- Connections -->
+        <mxCell id="c_pg_src" value="CDC&#xa;(logical replication)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="pg_db" target="src_postgres">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="c_src_q" value="Stream&#xa;changes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="src_postgres" target="queries_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="c_q_r" value="Query&#xa;results" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="queries_box" target="reaction_http">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1010" y="280"/>
+              <mxPoint x="1010" y="183"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="c_r_api" value="HTTP&#xa;POST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="reaction_http" target="ctrl_drasi">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend_drasi" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="400" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_title_d" value="Query Categories" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="50" y="505" width="150" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg_green" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="50" y="535" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_green_t" value="Delivery trigger (happy path)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="530" width="160" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg_red" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="50" y="555" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_red_t" value="SLA / timeout / escalation (alerting)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="550" width="180" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg_blue" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="50" y="575" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_blue_t" value="Geographic correlation (analysis)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="570" width="180" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="leg_purple" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="50" y="595" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_purple_t" value="Operational (cleanup, monitoring)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="590" width="180" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Drasi key features -->
+        <mxCell id="features_box" value="Key Drasi Features Used:&#xa;&#xa;• drasi.trueLater() — time-based triggers (SLA breach, expiry)&#xa;• drasi.changeDateTime() — CDC timestamp extraction&#xa;• drasi.previousDistinctValue() — state change detection&#xa;• drasi.linearGradient() — rate calculation over time window&#xa;• Cypher MATCH/WHERE — graph pattern matching on CDC stream" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="260" y="500" width="380" height="120" as="geometry"/>
+        </mxCell>
+        
+        <!-- Deployment note -->
+        <mxCell id="deploy_note" value="Deployment Order:&#xa;&#xa;1. drasi apply -f sources/postgres-cdc.yaml&#xa;2. drasi wait -f sources/postgres-cdc.yaml -t 120&#xa;3. drasi apply -f queries/emergency-alerts.yaml&#xa;4. drasi wait -f queries/emergency-alerts.yaml -t 120&#xa;5. drasi apply -f reactions/emergency-alerts-http.yaml" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;spacingLeft=10;spacingTop=5;fontFamily=Courier New;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="500" width="340" height="120" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="06 - End-to-End Flow (Drasi)" id="e2e-drasi-flow">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="title_e2e" value="End-to-End Flow: Alert Approval → Email Delivery (via Drasi)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="800" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="subtitle_e2e" value="Real-time delivery triggered by continuous queries (sub-second latency)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="400" y="50" width="600" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 1: User approves -->
+        <mxCell id="step1_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="200" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="step1_num" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="90" y="110" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step1_title" value="Approver Action" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="130" y="110" width="140" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step1_detail" value="POST /api/v1/alerts/{id}/approval&#xa;&#xa;{&#xa;  &quot;decision&quot;: &quot;approved&quot;&#xa;}" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Courier New;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="145" width="175" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 2: PostgreSQL update -->
+        <mxCell id="step2_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="250" width="200" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="step2_num" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="90" y="260" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step2_title" value="Database Update" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="130" y="260" width="140" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step2_detail" value="UPDATE alerts&#xa;SET status = 'approved',&#xa;    delivery_status = 'pending',&#xa;    sent_at = NOW()&#xa;WHERE alert_id = '...'" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Courier New;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="290" width="175" height="70" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 3: Drasi CDC -->
+        <mxCell id="step3_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="200" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="step3_num" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d6b656;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="90" y="410" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step3_title" value="Drasi CDC Source" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="130" y="410" width="140" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step3_detail" value="postgres-alerts source&#xa;detects change via&#xa;logical replication slot&#xa;&#xa;Event:&#xa;{ table: 'alerts',&#xa;  op: 'UPDATE',&#xa;  after: {...} }" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="440" width="175" height="70" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 4: Continuous Query -->
+        <mxCell id="step4_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="100" width="280" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="step4_num" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d6b656;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="360" y="110" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step4_title" value="Continuous Query Evaluates" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="400" y="110" width="220" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step4_query_name" value="delivery-trigger (Cypher)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="365" y="145" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="step4_query" value="MATCH (a:alerts)&#xa;WHERE a.status = 'Approved'&#xa;  AND a.delivery_status = 'Pending'&#xa;WITH a&#xa;MATCH (r:recipients)&#xa;WHERE r.is_active = true&#xa;RETURN&#xa;  a.alert_id AS alertId,&#xa;  r.recipient_id AS recipientId,&#xa;  a.headline AS headline,&#xa;  r.email_address AS email" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Courier New;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="365" y="170" width="255" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 5: Query Result -->
+        <mxCell id="step5_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="350" width="280" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="step5_num" value="5" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d6b656;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="360" y="360" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step5_title" value="Query Returns New Result" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="400" y="360" width="220" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step5_result" value="Result: ADDED&#xa;{&#xa;  &quot;alertId&quot;: &quot;3fa85f64-...&quot;,&#xa;  &quot;recipientId&quot;: &quot;abc123...&quot;,&#xa;  &quot;email&quot;: &quot;ops@example.com&quot;&#xa;}" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Courier New;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="365" y="390" width="255" height="70" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 6: Reaction -->
+        <mxCell id="step6_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="500" width="280" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="step6_num" value="6" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d6b656;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="360" y="510" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step6_title" value="HTTP Reaction Fires" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="400" y="510" width="220" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step6_detail" value="POST /api/v1/drasi/reactions/&#xa;     delivery-trigger&#xa;&#xa;Headers:&#xa;  X-Reaction-Token: ***&#xa;&#xa;Body:&#xa;{ &quot;alertId&quot;: &quot;3fa85f64-...&quot; }" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Courier New;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="365" y="540" width="255" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 7: API processes -->
+        <mxCell id="step7_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="700" y="100" width="260" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="step7_num" value="7" style="ellipse;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="110" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step7_title" value="API Handles Reaction" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="750" y="110" width="200" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step7_controller" value="DrasiReactionsController&#xa;.DeliveryTrigger()&#xa;&#xa;1. Validate token&#xa;2. Load alert from DB&#xa;3. Call DeliveryService&#xa;4. Record attempt" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="715" y="145" width="235" height="120" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 8: ACS -->
+        <mxCell id="step8_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="700" y="310" width="260" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="step8_num" value="8" style="ellipse;whiteSpace=wrap;html=1;fillColor=#b85450;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="320" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step8_title" value="Azure Communication Services" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="750" y="320" width="200" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step8_detail" value="DeliveryService sends email:&#xa;&#xa;From: alerts@example.com&#xa;To: ops@example.com&#xa;Subject: [SEVERE] Alert Headline&#xa;&#xa;Body: Alert details, expiry,&#xa;      affected areas" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="715" y="350" width="235" height="110" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 9: Delivered -->
+        <mxCell id="step9_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="700" y="500" width="260" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="step9_num" value="9" style="ellipse;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="710" y="510" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="step9_title" value="Email Delivered" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="750" y="510" width="200" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="step9_detail" value="Recipients receive email&#xa;&#xa;delivery_attempts table updated:&#xa;  status = 'success'&#xa;  sent_at = NOW()&#xa;  acs_operation_id = '...'" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="715" y="540" width="235" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- Flow arrows -->
+        <mxCell id="arrow_1_2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#6c8ebf;" edge="1" parent="1" source="step1_box" target="step2_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="arrow_2_3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#82b366;" edge="1" parent="1" source="step2_box" target="step3_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="arrow_3_4" value="CDC event" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d6b656;" edge="1" parent="1" source="step3_box" target="step4_box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="460"/>
+              <mxPoint x="310" y="210"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow_4_5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d6b656;" edge="1" parent="1" source="step4_box" target="step5_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="arrow_5_6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#d6b656;" edge="1" parent="1" source="step5_box" target="step6_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="arrow_6_7" value="HTTP POST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#82b366;" edge="1" parent="1" source="step6_box" target="step7_box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="565"/>
+              <mxPoint x="660" y="190"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="arrow_7_8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#82b366;" edge="1" parent="1" source="step7_box" target="step8_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="arrow_8_9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#b85450;" edge="1" parent="1" source="step8_box" target="step9_box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- Timing annotations -->
+        <mxCell id="timing_title" value="Latency Breakdown" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="100" width="200" height="25" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="timing_table" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="135" width="320" height="260" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_step1" value="Step 1-2: API → DB" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="145" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_val1" value="~50ms" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="145" width="60" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_step2" value="Step 2-3: CDC replication" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="175" width="160" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_val2" value="~100-300ms" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="175" width="80" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_step3" value="Step 3-4: Query evaluation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="205" width="180" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_val3" value="~10-50ms" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="205" width="70" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_step4" value="Step 4-6: Reaction trigger" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="235" width="160" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_val4" value="~5-20ms" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="235" width="60" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_step5" value="Step 6-7: HTTP call" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="265" width="130" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_val5" value="~10-30ms" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="265" width="60" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_step6" value="Step 7-9: API → ACS → Email" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="295" width="180" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_val6" value="~500-2000ms" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1235" y="295" width="85" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_divider" value="" style="line;strokeWidth=2;fillColor=none;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="325" width="300" height="10" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="t_total" value="Total (Approval → Delivered):" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#0078D4;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="345" width="180" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="t_total_val" value="&lt;3 seconds" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=14;fontStyle=1;fontFamily=Courier New;fontColor=#0078D4;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="345" width="90" height="25" as="geometry"/>
+        </mxCell>
+        
+        <!-- Key Benefits Box -->
+        <mxCell id="benefits_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="420" width="320" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="benefits_title" value="Why Drasi Matters" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="425" width="200" height="25" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="benefit_1" value="✓ No Polling" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="455" width="100" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="benefit_1_detail" value="CDC stream detects changes instantly,&#xa;no 5-second poll delay" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="475" width="280" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="benefit_2" value="✓ Declarative Logic" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="510" width="140" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="benefit_2_detail" value="Queries are YAML + Cypher, no custom&#xa;background job code to maintain" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="530" width="280" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="benefit_3" value="✓ Composable" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="565" width="100" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="benefit_3_detail" value="Add new queries (SLA breach, geo-&#xa;correlation) without touching app code" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="585" width="280" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- CAP alignment note -->
+        <mxCell id="cap_note" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="650" width="320" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="cap_title" value="CAP Severity in Queries" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="655" width="200" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="cap_detail" value="WHERE a.severity IN ['Extreme', 'Severe']&#xa;&#xa;Drasi queries filter by CAP 1.2 severity levels.&#xa;No translation needed—portable across systems." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1025" y="680" width="295" height="45" as="geometry"/>
+        </mxCell>
+        
+        <!-- Azure integration note -->
+        <mxCell id="azure_note" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="80" y="660" width="550" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="azure_title" value="Azure Integration" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="90" y="665" width="150" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="azure_detail" value="• App Configuration: Email recipients, CORS, feature flags loaded at startup + refreshed every 5 min&#xa;• Azure Maps: Frontend gets non-secret config from API, then requests short-lived SAS token (minted via managed identity)&#xa;• Workload Identity: Pods use federated credentials (no secrets in K8s) to access ACS, App Config, Key Vault, Maps" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="95" y="685" width="525" height="40" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

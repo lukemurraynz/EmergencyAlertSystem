@@ -1,0 +1,91 @@
+---
+# Ingress: Route external traffic to API
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: emergency-alerts-ingress
+  namespace: emergency-alerts
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    # WebSocket support for SignalR
+    nginx.ingress.kubernetes.io/websocket-services: emergency-alerts-signalr
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-connections: "50"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.emergency-alerts.example.com
+    secretName: emergency-alerts-tls
+  rules:
+  - host: api.emergency-alerts.example.com
+    http:
+      paths:
+      # API routes (backend)
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: emergency-alerts-api
+            port:
+              number: 80
+      # WebSocket for SignalR (backend)
+      - path: /signalr/
+        pathType: Prefix
+        backend:
+          service:
+            name: emergency-alerts-signalr
+            port:
+              number: 80
+      # Default catch-all for SPA (frontend)
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: emergency-alerts-frontend
+            port:
+              number: 80
+
+---
+# Certificate: TLS certificate via cert-manager
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: emergency-alerts-cert
+  namespace: emergency-alerts
+spec:
+  secretName: emergency-alerts-tls
+  duration: 2160h # 90 days
+  renewBefore: 360h # Renew 15 days early
+  commonName: api.emergency-alerts.example.com
+  dnsNames:
+  - api.emergency-alerts.example.com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+---
+# ClusterIssuer: Let's Encrypt for TLS certificates
+
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: alerts-admin@example.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: nginx

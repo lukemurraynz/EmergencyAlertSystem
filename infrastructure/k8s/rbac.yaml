@@ -1,0 +1,49 @@
+---
+# RBAC: Role and RoleBinding for pod access within namespace
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: emergency-alerts-role
+  namespace: emergency-alerts
+rules:
+# Allow reading service endpoints
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list", "watch"]
+# Allow reading ConfigMaps (for config updates)
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+# Allow pod log access
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: emergency-alerts-role-binding
+  namespace: emergency-alerts
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: emergency-alerts-role
+subjects:
+- kind: ServiceAccount
+  name: emergency-alerts-sa
+  namespace: emergency-alerts
+
+# StorageClass for persistent volumes (if needed later)
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: emergency-alerts-storage
+provisioner: disk.csi.azure.com
+parameters:
+  skuname: Premium_LRS
+  kind: Managed
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer

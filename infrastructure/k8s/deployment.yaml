@@ -1,0 +1,491 @@
+---
+# Emergency Alert Core System - Kubernetes Deployment Manifests
+# Managed identity federation: no stored credentials
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: emergency-alerts
+  labels:
+    app: emergency-alerts
+    environment: production
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: emergency-alerts-sa
+  namespace: emergency-alerts
+  annotations:
+    # Workload identity federation - maps to Azure Managed Identity
+    azure.workload.identity/client-id: ${MANAGED_IDENTITY_CLIENT_ID}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: emergency-alerts-config
+  namespace: emergency-alerts
+  annotations:
+    # CRITICAL: This ConfigMap contains placeholder variables (${VAR_NAME})
+    # that MUST be substituted by the CI/CD pipeline before deployment.
+    # DO NOT apply this file directly with kubectl - use the CI/CD pipeline
+    # which performs variable substitution in the "Update K8s ConfigMap" step.
+    #
+    # If deploying manually, run: infrastructure/scripts/fix-configmap.ps1
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  # PLACEHOLDER: Substituted by CI/CD pipeline from Azure deployment outputs
+  # NOTE: ConnectionStrings__EmergencyAlertsDb moved to Secret (emergency-alerts-db-credentials)
+  AppConfiguration__Endpoint: https://emergencyalerts2-prod-config.azconfig.io
+  KeyVault__VaultUri: https://emergencyalerts2-prod-kv.vault.azure.net/
+  AzureCommunicationServices__Endpoint: ${ACS_ENDPOINT}
+  Logging__LogLevel__Default: "Information"
+  Logging__LogLevel__Microsoft: "Warning"
+  Logging__LogLevel__Microsoft.AspNetCore: "Information"
+  Auth__AllowAnonymous: "true"
+  # CORS origins: CI/CD should inject CORS_ALLOWED_ORIGINS; defaults are for local dev only
+  Cors__AllowedOrigins: "${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:3000}"
+  # PostgreSQL connection environment variables for Drasi CDC source
+  # NOTE: Elastic Clusters use 'postgres' as the default database
+  # NOTE: POSTGRES_PASSWORD moved to Secret (emergency-alerts-db-credentials)
+  POSTGRES_HOST: "${POSTGRES_HOST}"
+  POSTGRES_PORT: "5432"
+  POSTGRES_USER: "${POSTGRES_USER}"
+  POSTGRES_DATABASE: "postgres"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emergency-alerts-api
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts-api
+    version: v1
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: emergency-alerts-api
+  template:
+    metadata:
+      labels:
+        app: emergency-alerts-api
+        azure.workload.identity/use: "true"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: emergency-alerts-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+
+      containers:
+      - name: api
+        image: ${ACR_NAME}.azurecr.io/emergency-alerts-api:${IMAGE_TAG}
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 5000
+          protocol: TCP
+        - name: https
+          containerPort: 5001
+          protocol: TCP
+
+        envFrom:
+        - configMapRef:
+            name: emergency-alerts-config
+        - secretRef:
+            name: emergency-alerts-db-credentials
+
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:5000"
+        - name: ASPNETCORE_HTTPS_PORT
+          value: "5001"
+        - name: AZURE_TENANT_ID
+          value: ${AZURE_TENANT_ID}
+        - name: AZURE_MANAGED_IDENTITY_ENDPOINT
+          value: "http://169.254.169.254/metadata/identity/oauth2/token"
+        
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: app-cache
+          mountPath: /app/.nuget/cache
+
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: app-cache
+        emptyDir:
+          sizeLimit: 1Gi
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - emergency-alerts-api
+              topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: workload-type
+                operator: In
+                values:
+                - general
+
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: emergency-alerts-api
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emergency-alerts-api
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts-api
+  annotations:
+    # Public DNS label for API access
+    service.beta.kubernetes.io/azure-dns-label-name: ${API_DNS_LABEL}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5000
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 5001
+    protocol: TCP
+  selector:
+    app: emergency-alerts-api
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emergency-alerts-signalr
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts-api
+    service: signalr
+  annotations:
+    # Public DNS label for SignalR access (avoid API DNS collisions)
+    service.beta.kubernetes.io/azure-dns-label-name: ${SIGNALR_DNS_LABEL}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5000
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 5001
+    protocol: TCP
+  selector:
+    app: emergency-alerts-api
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emergency-alerts-api-hpa
+  namespace: emergency-alerts
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emergency-alerts-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      selectPolicy: Min
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: emergency-alerts-api-pdb
+  namespace: emergency-alerts
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: emergency-alerts-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emergency-alerts-frontend
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts-frontend
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: emergency-alerts-frontend
+  template:
+    metadata:
+      labels:
+        app: emergency-alerts-frontend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101  # nginx user
+        fsGroup: 101
+
+      containers:
+      - name: frontend
+        image: ${ACR_NAME}.azurecr.io/emergency-alerts-frontend:${IMAGE_TAG}
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+
+        volumeMounts:
+        - name: cache
+          mountPath: /var/cache/nginx
+        - name: run
+          mountPath: /var/run
+
+      volumes:
+      - name: cache
+        emptyDir: {}
+      - name: run
+        emptyDir: {}
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - emergency-alerts-frontend
+              topologyKey: kubernetes.io/hostname
+
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: emergency-alerts-frontend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emergency-alerts-frontend
+  namespace: emergency-alerts
+  labels:
+    app: emergency-alerts-frontend
+  annotations:
+    # Optional: request an Azure-provided DNS name like
+    # <label>.<region>.cloudapp.azure.com
+    service.beta.kubernetes.io/azure-dns-label-name: ${FRONTEND_DNS_LABEL}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: emergency-alerts-frontend
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emergency-alerts-frontend-hpa
+  namespace: emergency-alerts
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emergency-alerts-frontend
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 85
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      selectPolicy: Min
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: emergency-alerts-frontend-pdb
+  namespace: emergency-alerts
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: emergency-alerts-frontend

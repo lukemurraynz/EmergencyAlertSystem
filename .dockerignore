@@ -1,0 +1,59 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+docs/
+
+# CI/CD
+.github/
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+packages/
+
+# Build artifacts
+dist/
+build/
+out/
+bin/
+obj/
+TestResults/
+coverage/
+
+# .NET
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+artifacts/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+*.log.*
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
