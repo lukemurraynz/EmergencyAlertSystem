@@ -172,7 +172,7 @@ To revert to password-based auth:
 - [Microsoft Entra ID and PostgreSQL authentication](https://learn.microsoft.com/en-us/azure/cosmos-db/postgresql/concepts-authentication)
 - [Configure authentication methods](https://learn.microsoft.com/en-us/azure/cosmos-db/postgresql/how-to-configure-authentication)
 - [Azure Identity SDK](https://learn.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme)
-- [Secretless authentication best practices](https://learn.microsoft.com/en-us/entra/architecture/zero-trust-architecture)
+- [Zero Trust identity and access management](https://learn.microsoft.com/en-us/security/zero-trust/deploy/identity)
 
 ---
 

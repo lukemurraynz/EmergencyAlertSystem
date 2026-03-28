@@ -529,6 +529,5 @@ cat infrastructure/bicep/main.bicep | grep aksOutboundIpAddress
 ---
 
 **Documentation Files:**
-- [AUTOMATION_IMPLEMENTATION_GUIDE.md](../AUTOMATION_IMPLEMENTATION_GUIDE.md) - Step-by-step setup
 - [AKS_POST_DEPLOYMENT_SETUP.md](AKS_POST_DEPLOYMENT_SETUP.md) - Technical deep-dive
 - [infrastructure/README.md](README.md) - Infrastructure overview

@@ -201,8 +201,7 @@ dotnet ef database update
 | Deploy to production | [DEPLOYMENT_RUNBOOK.md](infrastructure/DEPLOYMENT_RUNBOOK.md) |
 | Update Drasi queries | [drasi/README.md](infrastructure/drasi/README.md) |
 | Configure CORS/auth | [AKS_POST_DEPLOYMENT_SETUP.md](infrastructure/AKS_POST_DEPLOYMENT_SETUP.md) |
-| Troubleshoot deployments | [DEPLOYMENT_SAFETY_CHECKLIST.md](.github/DEPLOYMENT_SAFETY_CHECKLIST.md) |
-| Run load tests | [backend/tests/Load/README.md](backend/tests/Load/README.md) |
+| Run load tests | See `backend/tests/Load/` directory |
 | Migrate from Elastic Cluster | [ELASTIC_CLUSTER_MIGRATION.md](infrastructure/docs/ELASTIC_CLUSTER_MIGRATION.md) |
 
 ## Testing
@@ -249,7 +248,7 @@ Key configuration sources (in precedence order):
 
 ## Contributing
 
-See [.github/copilot-instructions.md](.github/copilot-instructions.md) for development standards and conventions.
+Follow the development standards and conventions outlined in the project documentation.
 
 **Before submitting PRs:**
 - Run linters: `./scripts/lint-all.ps1`
@@ -260,7 +259,6 @@ See [.github/copilot-instructions.md](.github/copilot-instructions.md) for devel
 ## Documentation
 
 - **Architecture**: [docs/diagrams/](docs/diagrams/) (Draw.io C4 models)
-- **Specifications**: [specs/001-emergency-alert-core/](specs/001-emergency-alert-core/)
 - **Runbooks**: [infrastructure/docs/runbooks/](infrastructure/docs/runbooks/)
 - **Migration Guides**: [infrastructure/docs/](infrastructure/docs/)
 
