@@ -199,8 +199,8 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2024-01-01' = {
 
 ## Reference
 
-- [Azure Workload Identity Federation](https://docs.microsoft.com/en-us/azure/active-directory/workload-identities/workload-identity-federation)
-- [GitHub Actions OIDC Provider](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect)
+- [Azure Workload Identity Federation](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation)
+- [GitHub Actions OIDC Provider](https://docs.github.com/en/actions/concepts/security/openid-connect)
 - [Azure AD Federated Credentials](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-create-trust?tabs=windows)
 
 ## Getting Azure Ingress Domain (for VITE_API_URL)
